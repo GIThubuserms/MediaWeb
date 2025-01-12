@@ -1,8 +1,9 @@
 import { Router } from "express";
-import {DoLike,DoUnlike} from '../controllers/like.controller.js'
+import {DoLike,totalpostlikes} from '../controllers/like.controller.js'
+import { verifyuser } from "../middlewares/verifyuser.js";
 
 
 export const likerouter=new Router()
 
-router.route('/like').post(DoLike)
-router.route('/unlike').post(DoUnlike)
+likerouter.route('/like/:postid').post(verifyuser,DoLike)
+likerouter.route('/totallikes/:postid').post(verifyuser,totalpostlikes)

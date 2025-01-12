@@ -1,10 +1,11 @@
 export const asynchandler=(fn)=>{
-return async(req,res)=>{
+return async(req,res,next)=>{
    try {
-     await fn(req,res)
+     await fn(req,res,next)
    } catch (error) {
-    res.status(400).json({message:error.message})
-   }
+    console.log(error);
+    throw new Error(error)        
+  }
 
 }
 }

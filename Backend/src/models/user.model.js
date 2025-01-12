@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { cloudinaryupload } from "../utils/Cloudinary.js";
 
 const Userschema = new Schema(
   {
@@ -24,7 +25,7 @@ const Userschema = new Schema(
   { timestamps: true }
 );
 
-Userschema.pre("save", async function () {
+Userschema.pre("save", async function(next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
@@ -34,14 +35,15 @@ Userschema.methods.verifypassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-Userschema.method.generaterefreshToken = function () {
+Userschema.methods.generaterefreshToken = function () {
   return jwt.sign(
     {
+      _id:this._id,
       username: this.username,
       email: this.username,
       avatar: this.avatar,
     },
-    1234,
+    process.env.REF_TOKEN,
     { expiresIn: "5d" }
   );
 };

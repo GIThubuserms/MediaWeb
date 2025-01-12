@@ -1,7 +1,9 @@
 import { Router } from "express";
-import {createPost} from '../controllers/post.controller.js'
-
+import {createPost,getposts} from '../controllers/post.controller.js'
+import {upload} from '../middlewares/multer.js'
+import {verifyuser} from '../middlewares/verifyuser.js'
 
 export const postrouter=new Router()
 
-router.route('/upload').post(createPost)
+postrouter.route('/upload').post(upload.single('post'),verifyuser,createPost)
+postrouter.route('/getpost').post(verifyuser,getposts)
