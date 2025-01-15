@@ -3,20 +3,24 @@ import { IoHeartOutline } from "react-icons/io5";
 import { useLikecontext } from '../../context/LikeContext.jsx';
 
 function Post({ data }) {
-    // const {likes,setlikes,fetchlike, fetchTotallike } = useLikecontext()
-    // const [islike, setislike] = useState('')
+    const {fetchlike, fetchTotallike } = useLikecontext()
+    const [islike, setislike] = useState('')
+    const [likes, setlikes] = useState(0);
+
     console.log(data);
     
-    //     (async function pp() {
-    //      await fetchTotallike(data?._id);
-    //     })()
-         
-
-
-    // async function dolike() {
-    //     const res = await fetchlike(data?._id)
-    //     setislike(res)
-    // }
+    useEffect(()=>{
+        async function pp() {
+          const res=  await fetchTotallike(data?._id);
+          setlikes(res||0)
+        }
+        pp()
+    },[dolike])
+       
+    async function dolike() {
+        const res = await fetchlike(data?._id)
+        setislike(res)
+    }
 
  
     return (
@@ -34,8 +38,8 @@ function Post({ data }) {
                 </div>
                 <img className="h-[400px] w-full" src={data.pic} alt="" />
                 <div className='flex space-x-1 items-center'>
-                    <IoHeartOutline  size={24} className={`"text-black" font-semibold rounded-3xl`} />
-                    <span className='font-semibold text-sm'>67</span>
+                    <IoHeartOutline onClick={dolike}  size={24} className={` ${islike==="Like successfull"?"text-red-600":"text-black"} font-semibold rounded-3xl`} />
+                    <span className='font-semibold text-sm'>{likes||0}</span>
                 </div>
                 <div>
                     <p className='pl-2 text-sm font-bold  font-sans'>{data.discription}</p>

@@ -5,7 +5,6 @@ import {toast} from 'react-toastify'
 export const LikeContext=createContext()
 
 export const Likeprovider=({children})=>{
-    const [likes, setlikes] = useState(0);
        
     async function fetchlike(postid) {
         try {
@@ -39,8 +38,7 @@ export const Likeprovider=({children})=>{
             );
             if (res.data.message) {
                 console.log(res.data.message?.Totallikes);
-                setlikes(res.data.message?.Totallikes)
-            return true
+                return res.data.message?.Totallikes
             }
         }      
         catch (error) {
@@ -48,7 +46,8 @@ export const Likeprovider=({children})=>{
         }
     }
 
-    return <LikeContext.Provider value={{fetchTotallike,fetchlike,likes,setlikes}}>
+    
+    return <LikeContext.Provider value={{fetchTotallike,fetchlike}}>
         {children}
     </LikeContext.Provider>
 }
