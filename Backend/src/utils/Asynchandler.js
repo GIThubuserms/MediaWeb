@@ -4,7 +4,7 @@ return async(req,res,next)=>{
      await fn(req,res,next)
    } catch (error) {
     console.log(error);
-    throw new Error(error)        
+   res.status(400).json({message:error.message}) 
   }
 
 }

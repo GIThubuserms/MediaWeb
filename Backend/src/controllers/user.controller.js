@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import {User} from '../models/user.model.js'
 import { cloudinaryupload } from '../utils/Cloudinary.js'
+import { log } from 'console'
 
 export const login=asynchandler(async(req,res)=>{
     const {email,password}=req.body
@@ -27,16 +28,17 @@ export const login=asynchandler(async(req,res)=>{
     }
     const options={
         httpOnly:true,
-        secure:true
-    }    
-    return res.status(200).cookie('jwt',refreshtoken,options).json({message:{isuseralreadyexists}})
+        secure:true,
+    }
+    
+    return res.status(200).cookie('jwt',refreshtoken,options).json({message:isuseralreadyexists})
 })
 
 export const signup=asynchandler(async(req,res)=>{    
     const {username,email,password}=req.body
     const avatar=req.file
-    console.log(avatar.path);
-    
+     console.log(avatar);
+     
     if(!(username||email ||password ||avatar)){
         throw new Error("All fields are required")
     }
@@ -69,6 +71,11 @@ export const signup=asynchandler(async(req,res)=>{
 })
 
 export const logout=asynchandler(async(req,res)=>{
-   return res.status(200).clearCookie('jwt').json({message:"User logout succesfully"})
+    const options={
+        httpOnly:true,
+        secure:true
+    }
+     res.clearCookie('jwt',process.env.REF_TOKEN,options)
+    return res.status(200).json({message:"User logout succesfully"})
 
 })

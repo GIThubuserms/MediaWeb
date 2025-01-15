@@ -1,24 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoHeartOutline } from "react-icons/io5";
+import { useLikecontext } from '../../context/LikeContext.jsx';
 
-function Post() {
+function Post({ data }) {
+    // const {likes,setlikes,fetchlike, fetchTotallike } = useLikecontext()
+    // const [islike, setislike] = useState('')
+    console.log(data);
+    
+    //     (async function pp() {
+    //      await fetchTotallike(data?._id);
+    //     })()
+         
+
+
+    // async function dolike() {
+    //     const res = await fetchlike(data?._id)
+    //     setislike(res)
+    // }
+
+ 
     return (
         <div className='mb-5 '>
-            <div class="max-w-sm space-y-2 rounded-xl  bg-white border  shadow dark:bg-gray-800 dark:border-gray-700">
+            <div className="max-w-sm space-y-2 rounded-xl  bg-white border  shadow dark:bg-gray-800 dark:border-gray-700">
                 <div className="avatar flex h-16 p-2 space-x-2">
                     <div className="ring-primary ring-offset-base-100 w-14  rounded-full ring ">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        <img src={data?.owner[0].avatar} />
                     </div>
                     <div className='w-full ' >
-                        <p>Murtaza saleem</p>
-                        <p>12:15</p>
+                        <p>{data?.owner[0].username}</p>
+                        <p>{data.createdAt}</p>
                     </div>
-                   
+
                 </div>
-                <img class="h-[400px] w-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_JX4dyggkixSXU15kp8ZLDpXFEMsuaAEjcQ&s" alt="" />
+                <img className="h-[400px] w-full" src={data.pic} alt="" />
                 <div className='flex space-x-1 items-center'>
-                    <IoHeartOutline size={24} />
-                    <span className='font-semibold text-sm'>56 likes</span>
+                    <IoHeartOutline  size={24} className={`"text-black" font-semibold rounded-3xl`} />
+                    <span className='font-semibold text-sm'>67</span>
+                </div>
+                <div>
+                    <p className='pl-2 text-sm font-bold  font-sans'>{data.discription}</p>
                 </div>
             </div>
 

@@ -6,28 +6,40 @@ import Upload from './componenets/Upload.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider,Route, Navigate } from 'react-router-dom'
-import Logout from './pages/Logout.jsx'
 import ProtectedRoutes from './componenets/ProtectedRoutes.jsx'
-import Loading from './componenets/Loading.jsx'
+import {ToastContainer} from 'react-toastify'
+import { Authprovider } from './context/Authcontext.jsx'
+import {  Postprovider } from './context/PostContext.jsx'
+import { Likeprovider } from './context/LikeContext.jsx'
 
-const isauth=true;
+const user=localStorage.getItem('user')
+
+
+
 const router=createBrowserRouter(
   createRoutesFromElements(
   <>
   <Route element={<ProtectedRoutes/>}>
   <Route path='/' element={<App/>}></Route>  
   <Route path='/upload' element={<Upload/>}></Route>  
-  <Route path='/logout' element={<Logout/>}></Route>  
   </Route>
-  <Route path='/login' element={!isauth?<Login/>:<Navigate to={'/'}/>}></Route>  
-  <Route path='/signup' element={!isauth?<Signup/>:<Navigate to={'/'}/>}></Route>  
+  <Route path='/login' element={<Login/>}></Route>  
+  <Route path='/signup' element={<Signup/>}></Route>  
   </>
   )
 )
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
- <RouterProvider router={router}/>
-  </React.StrictMode>,
+  <>
+   <Authprovider>
+      <Postprovider>
+        <Likeprovider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+        </Likeprovider>
+      </Postprovider>
+    </Authprovider>
+
+</>
 )

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export const verifyuser=asynchandler(async(req,_,next)=>{
     
     try {
-      const token=req?.cookies?.jwt || req?.header('Authentication')?.replace('Bearer ','')
+      const token=req?.cookies?.jwt || req?.header('Authentication')?.replace('Bearer ','')      
       
       if(!token){
           throw new Error("User is not verified")
@@ -13,13 +13,13 @@ export const verifyuser=asynchandler(async(req,_,next)=>{
       const isverify=jwt.verify(token,process.env.REF_TOKEN);
   
       if(!isverify){
-          throw new Error("User is not verified")
+          throw new Error("User token Not matched")
       }    
       req.user=isverify    
      next()
     } catch (error) {
       console.log(error);
       throw new Error(error)
-      
+    
     }
 })
