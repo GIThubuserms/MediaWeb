@@ -21,7 +21,7 @@ export const Postprovider = ({ children }) => {
                       setloading(true);
                       
                       const res = await axios.post(
-                          `http://localhost:4000/api/v1/post/getpost/?pageNum=${currentpage}&&postsperpage=5`,
+                          `http://localhost:4000/api/v1/post/getpost/?pageNum=${currentpage}&&postsperpage=10`,
                           {},
                           { withCredentials: true }
                       );
@@ -47,7 +47,7 @@ export const Postprovider = ({ children }) => {
     }, [currentpage,user]); // Trigger useEffect on page change
 
     return (
-        <PostContext.Provider value={{ currentpage, setcurrentpage, post, loading}}>
+        <PostContext.Provider value={{ currentpage, setcurrentpage,setposts,post, loading}}>
             {children}
         </PostContext.Provider>
     );
