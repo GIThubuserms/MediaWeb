@@ -2,6 +2,10 @@ import express, { urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"
 import dotenv from "dotenv";
+import path from 'path'
+
+
+
 const app = express();
 
 dotenv.config({ path: ".env" });
@@ -34,3 +38,17 @@ dbconnection()
   .catch((error) => {
     console.log(error);
   });
+
+  // const NODE_ENV="production"
+  // if(NODE_ENV==='production'){
+  //   const dirpath=path.resolve()
+  //   app.use(express.static(path.join(dirpath,'Frontend','dist')))
+  //   app.use('*',(req,res)=>{
+  //     res.sendFile(path.resolve(dirpath,'Frontend','dist','index.html'))
+  //   })
+  // }
+
+
+
+  //code for deployment
+

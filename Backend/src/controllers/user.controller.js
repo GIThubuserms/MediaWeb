@@ -1,81 +1,107 @@
-import {asynchandler} from '../utils/Asynchandler.js'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import {User} from '../models/user.model.js'
-import { cloudinaryupload } from '../utils/Cloudinary.js'
-import { log } from 'console'
+import { asynchandler } from "../utils/Asynchandler.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { User } from "../models/user.model.js";
+import { cloudinaryupload } from "../utils/Cloudinary.js";
+import { log } from "console";
+import nodemailer from "nodemailer";
+import dotenv from 'dotenv';
+dotenv.config();
 
-export const login=asynchandler(async(req,res)=>{
-    const {email,password}=req.body
-    
-    if(!(email ||password )){
-        throw new Error("All fields are required")
-    }
-    
-    const isuseralreadyexists= await User.findOne({email})
-    if(!isuseralreadyexists){
-        throw new Error("User Doesnot exists ")
-    }
-    
-    const ispasscorrect=await isuseralreadyexists.verifypassword(password)
-    if(!ispasscorrect){
-        throw new Error("Incorrect Password")
-    }
 
-    const refreshtoken=isuseralreadyexists.generaterefreshToken()
-    if(!refreshtoken){
-        throw new Error("Error while generating token")
+const transport = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
+  },
+});
+
+export const login = asynchandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!(email || password)) {
+    throw new Error("All fields are required");
+  }
+
+  const isuseralreadyexists = await User.findOne({ email });
+  if (!isuseralreadyexists) {
+    throw new Error("User Doesnot exists ");
+  }
+
+  const ispasscorrect = await isuseralreadyexists.verifypassword(password);
+  if (!ispasscorrect) {
+    throw new Error("Incorrect Password");
+  }
+
+  const refreshtoken = isuseralreadyexists.generaterefreshToken();
+  if (!refreshtoken) {
+    throw new Error("Error while generating token");
+  }
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  const mailoptios = {
+    from: process.env.EMAIL,
+    to:email,
+    subject: "Welcome To Chatty",
+    text: `Welcome To Chatty ${email}`,
+    html: "<b>Welcome, I hope that you enjoyed our service :) </b>",
+  };
+  transport.sendMail(mailoptios, (error, info) => {
+    if (error) {
+        console.error('Email sending failed:', error);
     }
-    const options={
-        httpOnly:true,
-        secure:true,
-    }
-    
-    return res.status(200).cookie('jwt',refreshtoken,options).json({message:isuseralreadyexists})
-})
+    console.log("Email sent: " + info);
+  });
 
-export const signup=asynchandler(async(req,res)=>{    
-    const {username,email,password}=req.body
-    const avatar=req.file
-     console.log(avatar);
-     
-    if(!(username||email ||password ||avatar)){
-        throw new Error("All fields are required")
-    }
+  return res
+    .status(200)
+    .cookie("jwt", refreshtoken, options)
+    .json({ message: isuseralreadyexists });
+});
 
-    const isuseralreadyexists= await User.findOne({$or:[{username},{email}]})
-    if(isuseralreadyexists){
-        throw new Error("User already exists")
-    }
-    
-    const avatarurl=await cloudinaryupload(avatar.path)
+export const signup = asynchandler(async (req, res) => {
+  const { username, email, password } = req.body;
+  const avatar = req.file;
+  console.log(avatar);
 
-    if(!avatarurl){
-        throw new Error("File uploading fail")
-    }
-    
-     
-    const newuser=await User.create({
-        username:username,
-        email:email,
-        password:password,
-        avatar:avatarurl
-    })
-    
-    if(!newuser){
-        throw new Error("User creation fail")
+  if (!(username || email || password || avatar)) {
+    throw new Error("All fields are required");
+  }
 
-    }    
-    return res.status(200).json({message:newuser})
+  const isuseralreadyexists = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+  if (isuseralreadyexists) {
+    throw new Error("User already exists");
+  }
 
-})
+  const avatarurl = await cloudinaryupload(avatar.path);
 
-export const logout=asynchandler(async(req,res)=>{
-    const options={
-        httpOnly:true,
-        secure:true
-    }
-     res.clearCookie('jwt',process.env.REF_TOKEN,options)
-    return res.status(200).json({message:"User logout succesfully"})
+  if (!avatarurl) {
+    throw new Error("File uploading fail");
+  }
 
-})
+  const newuser = await User.create({
+    username: username,
+    email: email,
+    password: password,
+    avatar: avatarurl,
+  });
+
+  if (!newuser) {
+    throw new Error("User creation fail");
+  }
+  return res.status(200).json({ message: newuser });
+});
+
+export const logout = asynchandler(async (req, res) => {
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  res.clearCookie("jwt", process.env.REF_TOKEN, options);
+  return res.status(200).json({ message: "User logout succesfully" });
+});
