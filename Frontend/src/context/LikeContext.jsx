@@ -9,7 +9,7 @@ export const Likeprovider=({children})=>{
     async function fetchlike(postid) {
         try {
             const res = await axios.post(
-                `http://localhost:4000/api/v1/likes/like/${postid}`,
+                `https://mediaweb.onrender.com/api/v1/like/likes/${postid}`,
                 {},
                 { withCredentials: true }
             );
@@ -32,7 +32,7 @@ export const Likeprovider=({children})=>{
     async function fetchTotallike(postid) {
         try {
             const res = await axios.post(
-                `http://localhost:4000/api/v1/likes/totallikes/${postid}`,
+                `https://mediaweb.onrender.com/api/v1/like/totallikes/${postid}`,
                 {},
                 { withCredentials:true }
             );

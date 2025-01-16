@@ -21,7 +21,7 @@ export const Postprovider = ({ children }) => {
                       setloading(true);
                       
                       const res = await axios.post(
-                          `http://localhost:4000/api/v1/post/getpost/?pageNum=${currentpage}&&postsperpage=10`,
+                          `https://mediaweb.onrender.com/api/v1/post/getpost/?pageNum=${currentpage}&&postsperpage=10`,
                           {},
                           { withCredentials: true }
                       );

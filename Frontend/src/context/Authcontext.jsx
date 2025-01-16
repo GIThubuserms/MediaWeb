@@ -12,7 +12,7 @@ const [loading,setisloading]=useState(false)
  async function login(data){
    try {
     setisloading(true)
-     const response=await axios.post('http://localhost:4000/api/v1/user/login',data,{withCredentials:true})
+     const response=await axios.post('https://mediaweb.onrender.com/api/v1/user/login',data,{withCredentials:true})
      if(response){        
       console.log(response?.data?.message);
       setuser(response?.data?.message)
@@ -36,7 +36,7 @@ const [loading,setisloading]=useState(false)
  async function logout(data){
    try {
      setisloading(true)
-     const response=await axios.post('http://localhost:4000/api/v1/user/logout',{},{withCredentials:true})
+     const response=await axios.post('https://mediaweb.onrender.com/api/v1/user/logout',{},{withCredentials:true})
      if(response){        
       console.log(response?.data?.message);
       setuser(null)
@@ -64,7 +64,7 @@ const [loading,setisloading]=useState(false)
       form.append("email",data.email),
       form.append("password",data.password),
       form.append("avatar",data.avatar)
-     const response=await axios.post('http://localhost:4000/api/v1/user/signup',form,{headers:{"Content-Type": "multipart/form-data",}})
+     const response=await axios.post('https://mediaweb.onrender.com/api/v1/user/signup',form,{headers:{"Content-Type": "multipart/form-data",}})
      if(response){        
       console.log(response?.data?.message);
       setisloading(false)
