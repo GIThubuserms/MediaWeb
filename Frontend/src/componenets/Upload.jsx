@@ -22,7 +22,7 @@ function Upload() {
     
     try {
       setisloading(true)
-      const res = await axios.post('http://localhost:4000/api/v1/post/upload',form1, { withCredentials: true })
+      const res = await axios.post('https://mediaweb.onrender.com/api/v1/post/upload',form1, { withCredentials: true })
       if (res.data.message) {
         console.log(res.data.message);
         setposts([...post, res.data.message])
