@@ -23,7 +23,7 @@ export const Postprovider = ({ children }) => {
                       const res = await axios.post(
                           `https://mediaweb.onrender.com/api/v1/post/getpost/?pageNum=${currentpage}&&postsperpage=10`,
                           {},
-                          { withCredentials: true }
+                          { withCredentials: true, }
                       );
       
                       if (res && res.data.message) {
