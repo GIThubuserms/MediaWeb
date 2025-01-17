@@ -38,10 +38,7 @@ export const login = asynchandler(async (req, res) => {
   if (!refreshtoken) {
     throw new Error("Error while generating token");
   }
-  const options = {
-    httpOnly: true,
-    sameSite: 'None',
-  };
+
   const mailoptios = {
     from: process.env.EMAIL,
     to:email,
@@ -58,7 +55,7 @@ export const login = asynchandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("jwt", refreshtoken, options)
+    .cookie("jwt", refreshtoken)
     .json({ message: isuseralreadyexists });
 });
 
@@ -98,10 +95,7 @@ export const signup = asynchandler(async (req, res) => {
 });
 
 export const logout = asynchandler(async (req, res) => {
-  const options = {
-    httpOnly: true,
-    sameSite: 'None',  
-  };
-  res.clearCookie("jwt", options);
+
+  res.clearCookie("jwt");
   return res.status(200).json({ message: "User logout succesfully" });
 });
