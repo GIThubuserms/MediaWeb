@@ -9,13 +9,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-const transport = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-});
+// const transport = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.PASS,
+//   },
+// });
 
 export const login = asynchandler(async (req, res) => {
   const { email, password } = req.body;
@@ -39,23 +39,28 @@ export const login = asynchandler(async (req, res) => {
     throw new Error("Error while generating token");
   }
 
-  const mailoptios = {
-    from: process.env.EMAIL,
-    to:email,
-    subject: "Welcome To Chatty",
-    text: `Welcome To Chatty ${email}`,
-    html: "<b>Welcome, I hope that you enjoyed our service :) </b>",
+  // const mailoptios = {
+  //   from: process.env.EMAIL,
+  //   to:email,
+  //   subject: "Welcome To Chatty",
+  //   text: `Welcome To Chatty ${email}`,
+  //   html: "<b>Welcome, I hope that you enjoyed our service :) </b>",
+  // };
+  // transport.sendMail(mailoptios, (error, info) => {
+  //   if (error) {
+  //       console.error('Email sending failed:', error);
+  //   }
+  //   console.log("Email sent: " + info);
+  // });
+  const options = {
+    httpOnly: true,
+    secure: true,      // Ensure it's HTTPS
+    sameSite: 'None',  // Required for cross-origin
   };
-  transport.sendMail(mailoptios, (error, info) => {
-    if (error) {
-        console.error('Email sending failed:', error);
-    }
-    console.log("Email sent: " + info);
-  });
-
+  
   return res
     .status(200)
-    .cookie("jwt", refreshtoken)
+    .cookie("jwt", refreshtoken,options)
     .json({ message: isuseralreadyexists });
 });
 
