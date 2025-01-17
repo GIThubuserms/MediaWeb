@@ -5,6 +5,7 @@ export const verifyuser=asynchandler(async(req,_,next)=>{
     
     try {
       const token=req?.cookies?.jwt || req?.header('Authentication')?.replace('Bearer ','')      
+      console.log(token);
       
       if(!token){
           throw new Error("User is not verified")

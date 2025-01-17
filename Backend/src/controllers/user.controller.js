@@ -40,8 +40,7 @@ export const login = asynchandler(async (req, res) => {
   }
   const options = {
     httpOnly: true,
-    secure: true,
-    sameSite: 'Lax',
+    sameSite: 'None',
   };
   const mailoptios = {
     from: process.env.EMAIL,
@@ -101,8 +100,7 @@ export const signup = asynchandler(async (req, res) => {
 export const logout = asynchandler(async (req, res) => {
   const options = {
     httpOnly: true,
-    secure: true,
-    sameSite: 'Lax',  
+    sameSite: 'None',  
   };
   res.clearCookie("jwt", options);
   return res.status(200).json({ message: "User logout succesfully" });
