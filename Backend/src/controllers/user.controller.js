@@ -61,7 +61,6 @@ export const login = asynchandler(async (req, res) => {
       httpOnly:true,
       secure:true,
       sameSite:'None',
-      domain:"media-web-henna.vercel.app"
     })
     .json({ message: isuseralreadyexists });
 });
