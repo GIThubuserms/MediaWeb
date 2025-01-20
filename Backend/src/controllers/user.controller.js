@@ -54,13 +54,14 @@ export const login = asynchandler(async (req, res) => {
   //   console.log("Email sent: " + info);
   // });
  
-  
+  let NODE_ENV="production"
+
   return res
     .status(200)
     .cookie("jwt", refreshtoken,{
       httpOnly:true,
-      secure:true,
-      sameSite:'None',
+      secure:NODE_ENV === 'production',     
+       sameSite:'None',
     })
     .json({ message: isuseralreadyexists });
 });
