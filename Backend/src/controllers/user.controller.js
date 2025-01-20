@@ -6,6 +6,7 @@ import { cloudinaryupload } from "../utils/Cloudinary.js";
 import { log } from "console";
 import nodemailer from "nodemailer";
 import dotenv from 'dotenv';
+import { Domain } from "domain";
 dotenv.config();
 
 
@@ -52,15 +53,16 @@ export const login = asynchandler(async (req, res) => {
   //   }
   //   console.log("Email sent: " + info);
   // });
-  const options = {
-    httpOnly: true,
-    secure: true,      // Ensure it's HTTPS
-    sameSite: 'None',  // Required for cross-origin
-  };
+ 
   
   return res
     .status(200)
-    .cookie("jwt", refreshtoken,options)
+    .cookie("jwt", refreshtoken,{
+      httpOnly:true,
+      secure:true,
+      sameSite:'None',
+      domain:"media-web-henna.vercel.app"
+    })
     .json({ message: isuseralreadyexists });
 });
 
